@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reportes de Ventas - Bar 💰</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    
+    <style>
+        /* Estilos base para el fondo (Imagen y Coherencia) */
+        body {
+            background-image: url('./img/fondo.jpg'); /* Fondo de imagen de bar */
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            min-height: 100vh;
+            color: #ffffff; /* Color de texto base */
+        }
+
+        /* 1. Barra de Navegación (Nueva adición para coherencia) */
+        .navbar {
+            background-color: rgba(10, 10, 10, 0.95) !important; 
+            border-bottom: 3px solid #ffc107; /* Acento amarillo */
+        }
+        .navbar-brand {
+            color: #ffc107 !important; 
+            font-weight: bold;
+        }
+        
+        /* Contenedor principal de la página (Fondo semitransparente) */
+        .page-container {
+            background-color: rgba(0, 0, 0, 0.75); /* Fondo negro con buena transparencia */
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5); 
+        }
+
+        /* 2. Estilo para inputs (Date y botones) */
+        .form-control {
+            background-color: rgba(255, 255, 255, 0.1); 
+            color: #ffffff;
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        .form-control:focus {
+            background-color: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 0 0.25rem rgba(255, 193, 7, 0.5); /* Resplandor amarillo */
+            border-color: #ffc107;
+        }
+
+        /* Fuerza el color del texto del date picker (depende del navegador) */
+        input[type="date"] {
+            color: #ffffff;
+        }
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(1); /* Cambia el color del icono del calendario a blanco */
+        }
+
+        /* 3. Tabla */
+        .table {
+            color: white;
+            margin-top: 25px;
+        }
+        .table-dark thead th {
+            background-color: #ffc107; /* Encabezado amarillo */
+            color: #000000;
+            border-color: #ffc107 !important;
+        }
+        .table-striped > tbody > tr:nth-of-type(odd) > * {
+             background-color: rgba(20, 20, 20, 0.9); /* Rayas más oscuras */
+        }
+        .table-striped > tbody > tr:nth-of-type(even) > * {
+             background-color: rgba(30, 30, 30, 0.9);
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-dark px-3 sticky-top">
+        <a class="navbar-brand" href="dashboard.html">
+                <span class="text-warning">🍹 Panel de Bar</span>
+            </a>
+        <button id="logout" class="btn btn-danger btn-sm">Cerrar sesión</button> 
+    </nav>
+    
+    <main class="container my-5">
+        <div class="page-container">
+            
+            <h1 class="text-warning text-center mb-4">📊 Reporte de Ventas</h1>
+
+            <div class="p-4 mb-4 border-bottom border-secondary">
+                <form class="row g-3 align-items-end justify-content-center" onsubmit="event.preventDefault(); buscarReporte();">
+                    
+                    <div class="col-md-3">
+                        <label for="fecha_inicio" class="form-label">Fecha inicio:</label>
+                        <input type="date" id="fecha_inicio" class="form-control">
+                    </div>
+
+                    <div class="col-md-3">
+                        <label for="fecha_fin" class="form-label">Fecha fin:</label>
+                        <input type="date" id="fecha_fin" class="form-control">
+                    </div>
+
+                    <div class="col-md-2 d-grid">
+                        <button type="submit" class="btn btn-warning fw-bold">Buscar</button>
+                    </div>
+
+                </form>
+            </div>
+
+            <h4 class="text-white mb-3">Detalle de Ventas</h4>
+            <table class="table table-dark table-striped table-hover shadow-lg" id="tablaVentas">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID Venta</th>
+                        <th>Total</th>
+                        <th>Fecha</th>
+                        <th>Cajero</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>VNT-00123</td>
+                        <td>$85.50</td>
+                        <td>2025-11-25 20:30</td>
+                        <td>Ana</td>
+                    </tr>
+                    <tr>
+                        <td>VNT-00124</td>
+                        <td>$12.00</td>
+                        <td>2025-11-26 01:15</td>
+                        <td>Carlos</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="d-flex justify-content-end pt-3">
+                <button onclick="descargarCSV()" class="btn btn-outline-warning me-2 fw-bold">📥 CSV</button>
+                <button onclick="descargarPDF()" class="btn btn-danger fw-bold">📥 PDF</button>
+            </div>
+
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="reportes.js"></script>
+    <script>
+        // Lógica de logout (manteniendo la coherencia)
+        document.getElementById("logout")?.addEventListener("click", () => {
+            localStorage.clear();
+            window.location.href = "login.html";
+        });
+        
+        // NOTA: Las funciones buscarReporte(), descargarCSV() y descargarPDF() deben estar definidas en reportes.js
+    </script>
+</body>
+</html>

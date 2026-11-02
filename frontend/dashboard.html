@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel de Administración - Bar 🍹</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <style>
+    /* Estilos base para el fondo */
+    body {
+      background-image: url('./img/fondo.jpg'); 
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      min-height: 100vh; /* Asegura que el cuerpo ocupe al menos toda la altura de la vista */
+    }
+
+    /* Estilo para un contenedor principal más transparente y centrado */
+    .panel-container {
+      background-color: rgba(0, 0, 0, 0.75); /* Fondo negro con buena transparencia */
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5); /* Sombra para resaltar */
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+
+    /* Estilos para las tarjetas de contenido */
+    .card {
+      background-color: rgba(30, 30, 30, 0.9); /* Fondo oscuro semitransparente para tarjetas */
+      color: #ffffff; /* Texto blanco */
+      border: 1px solid rgba(255, 255, 255, 0.1); /* Borde sutil */
+    }
+    
+    /* Estilo para el encabezado/barra de navegación */
+    .navbar {
+        background-color: rgba(10, 10, 10, 0.95) !important; /* Fondo casi opaco para el encabezado */
+        border-bottom: 3px solid #ffc107; /* Línea de color de acento (Amarillo de Bootstrap) */
+    }
+    
+    /* Estilo para la tabla */
+    .table-dark {
+      background-color: rgba(20, 20, 20, 0.9);
+      --bs-table-bg: rgba(20, 20, 20, 0.9); /* Asegura el fondo oscuro */
+      --bs-table-color: #ffffff; /* Asegura el texto blanco */
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">
+          <span class="text-warning">Bar Dashboard</span>
+      </a>
+      <div class="d-flex align-items-center">
+        <span class="navbar-text me-3" id="bienvenida"></span>
+        <a href="usuarios.html" class="btn btn-outline-warning me-2">
+            Gestión de Usuarios
+        </a>
+        <a href="productos.html" class="btn btn-outline-warning me-2">
+            Gestión de Productos
+        </a>
+        <a href="pedidos.html" class="btn btn-outline-warning me-2">
+            Gestión de Pedidos
+        </a>
+        <a href="mesas.html" class="btn btn-outline-warning me-2">
+            Gestión de Mesas
+        </a>
+        <a href="reportes.html" class="btn btn-outline-warning me-2">
+            Reportes
+        </a>
+        <a href="cierre_caja.html" class="btn btn-outline-warning me-2">
+            Cierre de Caja
+        </a>
+        <button id="logout" class="btn btn-danger">
+            <i class="bi bi-box-arrow-right"></i> Cerrar sesión
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-10 col-xl-9">
+        <div class="panel-container text-light my-5">
+          
+          <h1 class="mb-4 text-warning">Panel de Administración</h1>
+
+          <div class="row mb-4">
+            <div class="col-md-4">
+              <div class="card text-center p-3">
+                <h5>Ventas Hoy</h5>
+                <p class="display-6 text-success">$1.250.000</p>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="card text-center p-3">
+                <h5>Pedidos Activos</h5>
+                <p class="display-6 text-info">12</p>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="card text-center p-3">
+                <h5>Inventario Crítico</h5>
+                <p class="display-6 text-danger">4</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="card p-3 mb-4">
+            <h4 class="card-title text-warning">Últimos Pedidos</h4>
+            <table class="table table-dark table-striped table-hover mt-3">
+              <thead>
+                <tr>
+                  <th># Pedido</th>
+                  <th>Mesa</th>
+                  <th>Total</th>
+                  <th>Estado</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>#1001</td><td>Mesa 5</td><td>$155.000</td><td><span class="badge bg-success">Pagado</span></td></tr>
+                <tr><td>#1002</td><td>Barra</td><td>$32.500</td><td><span class="badge bg-warning text-dark">Pendiente</span></td></tr>
+                <tr><td>#1003</td><td>Mesa 12</td><td>$78.000</td><td><span class="badge bg-info text-dark">Servido</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </main>
+  
+  <script>
+    // Se recomienda agregar el icono de Bootstrap si no está cargado
+    // document.getElementById("logout").innerHTML = '<i class="bi bi-box-arrow-right"></i> Cerrar sesión';
+
+    const usuario = JSON.parse(localStorage.getItem("usuario"));
+    const token = localStorage.getItem("token");
+
+    // Lógica de redirección
+    if (!usuario || !token) {
+      window.location.href = "login.html";
+    } else {
+      // Se actualiza el texto en la nueva ubicación (navbar)
+      document.getElementById("bienvenida").textContent =
+        `Bienvenido, ${usuario.nombre} (Rol: ${usuario.rol})`;
+    }
+
+    // Lógica de logout
+    document.getElementById("logout").addEventListener("click", () => {
+      localStorage.clear();
+      window.location.href = "login.html";
+    });
+  </script>
+</body>
+</html>

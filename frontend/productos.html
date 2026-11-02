@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Inventario - Bar 🍹</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <style>
+        /* Estilos base para el fondo (igual que las otras páginas) */
+        body {
+            background-image: url('./img/fondo.jpg'); 
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            min-height: 100vh;
+        }
+
+        /* Estilo para el encabezado/barra de navegación */
+        .navbar {
+            background-color: rgba(10, 10, 10, 0.95) !important; 
+            border-bottom: 3px solid #ffc107; /* Acento amarillo */
+        }
+
+        /* Estilo para el contenedor principal de la página */
+        .page-container {
+            background-color: rgba(0, 0, 0, 0.75); /* Fondo negro semitransparente */
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5); 
+        }
+
+        /* Estilo para la tarjeta del formulario */
+        .form-card {
+            background-color: rgba(30, 30, 30, 0.9);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Estilo para los inputs y selects base */
+        .form-control, .form-select {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+        .form-control:focus, .form-select:focus {
+            background-color: rgba(255, 255, 255, 0.15);
+            color: #ffffff;
+            box-shadow: 0 0 0 0.25rem rgba(255, 193, 7, 0.5); 
+            border-color: #ffc107;
+        }
+        
+        /* Estilos para el desplegable (coherencia con Sede/Rol) */
+        .form-select option {
+            background-color: #333; 
+            color: #fff;
+            padding: 5px;
+        }
+
+        /* Encabezado de la tabla para mejor contraste */
+        .table-dark thead th {
+            background-color: #ffc107; 
+            color: #000000;
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body class="bg-dark text-light">
+    
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="dashboard.html">
+                <span class="text-warning">🍹 Panel de Bar</span>
+            </a>
+            <div class="d-flex align-items-center">
+                <span class="navbar-text me-3 text-white-50">Gestión de Inventario</span>
+                <button id="logout" class="btn btn-danger">Cerrar sesión</button> 
+            </div>
+        </div>
+    </nav>
+
+    <main class="container-fluid my-5"> <div class="row justify-content-center">
+            <div class="col-lg-12">
+                <div class="page-container">
+
+                    <h1 class="mb-4 text-warning text-center">Gestión de Productos e Inventario</h1>
+
+                    <div class="card form-card p-4 mb-5 shadow-lg">
+                        <h4 class="card-title text-white mb-3">Registrar / Actualizar Producto</h4>
+                        
+                        <form id="formProducto" class="row g-3">
+                            <div class="col-md-3">
+                                <input type="text" name="nombre_producto" class="form-control" placeholder="Nombre del producto" required>
+                            </div>
+                            <div class="col-md-2">
+                                <select name="categoria" class="form-select form-control">
+                                    <option value="" selected disabled>Categoría</option>
+                                    <option value="Cerveza">Cerveza</option>
+                                    <option value="Licor">Licor</option>
+                                    <option value="Snack">Snack</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <input type="text" name="marca" class="form-control" placeholder="Marca">
+                            </div>
+                            <div class="col-md-1">
+                                <input type="text" name="tamaño_volumen" class="form-control" placeholder="Tamaño">
+                            </div>
+                            <div class="col-md-1">
+                                <input type="number" step="0.01" name="precio" class="form-control" placeholder="Precio ($)" required>
+                            </div>
+                            <div class="col-md-1">
+                                <input type="number" name="cantidad" class="form-control" placeholder="Cant." required>
+                            </div>
+                            <div class="col-md-1">
+                                <select name="id_sede" class="form-select form-control" required>
+                                    <option value="" selected disabled>Sede</option>
+                                    <option value="1">Restrepo</option>
+                                    <option value="2">Calle 95</option>
+                                    <option value="1">Parkway</option>
+                                </select>
+                            </div>
+                            <div class="col-md-1 d-grid">
+                                <button type="submit" class="btn btn-warning fw-bold">Guardar</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <h3 class="mb-3 text-white">Listado Detallado de Inventario</h3>
+                    <table class="table table-dark table-striped table-hover shadow-lg" id="tablaProductos">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nombre</th>
+                                <th>Categoría</th>
+                                <th>Marca</th>
+                                <th>Tamaño</th>
+                                <th>Precio</th>
+                                <th>Cantidad</th>
+                                <th>Sede</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>Cerveza Águila</td>
+                                <td>Cerveza</td>
+                                <td>Bavaria</td>
+                                <td>330ml</td>
+                                <td>$5.50</td>
+                                <td>150</td>
+                                <td>1</td>
+                                <td>
+                                    <button class="btn btn-sm btn-info me-2">Editar</button>
+                                    <button class="btn btn-sm btn-danger">Eliminar</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                       <button id="ordenarPrecio">Ordenar por precio</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="productos.js"></script>
+    
+    <script>
+        document.getElementById("logout")?.addEventListener("click", () => {
+            localStorage.clear();
+            window.location.href = "login.html";
+        });
+    </script>
+</body>
+</html>
