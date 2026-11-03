@@ -13,7 +13,6 @@ const login = async (req, res) => {
     if (!usuario)
         return res.status(401).json({ mensaje: 'Credenciales incorrectas' });
 
-    // Si aún no tienes las contraseñas encriptadas, compara directamente
     const coincide = await bcrypt.compare(contrasenia, usuario.contrasenia);
 
     if (!coincide)
