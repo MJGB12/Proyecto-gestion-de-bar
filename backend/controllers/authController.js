@@ -11,14 +11,13 @@ const login = async (req, res) => {
 
     const usuario = await Usuario.findOne({ where: { documento, estado: true } });
     if (!usuario)
-      return res.status(404).json({ mensaje: 'Usuario no encontrado o inactivo' });
+        return res.status(401).json({ mensaje: 'Credenciales incorrectas' });
 
     // Si aún no tienes las contraseñas encriptadas, compara directamente
-    const coincide = usuario.contrasenia === contrasenia ||
-                     await bcrypt.compare(contrasenia, usuario.contrasenia);
+    const coincide = await bcrypt.compare(contrasenia, usuario.contrasenia);
 
     if (!coincide)
-      return res.status(401).json({ mensaje: 'Contraseña incorrecta' });
+        return res.status(401).json({ mensaje: 'Credenciales incorrectas' });
 
     const token = jwt.sign(
       { id_usuario: usuario.id_usuario, rol: usuario.rol },
