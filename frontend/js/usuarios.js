@@ -1,7 +1,6 @@
 const token = localStorage.getItem("token");
 const usuario = JSON.parse(localStorage.getItem("usuario"));
 
-// ✅ Verifica si el usuario tiene permisos de administrador
 if (!token || !usuario || usuario.rol !== 1) {
   alert("Acceso denegado: solo administradores");
   window.location.href = "login.html";
@@ -10,53 +9,78 @@ if (!token || !usuario || usuario.rol !== 1) {
 const tablaBody = document.querySelector("#tablaUsuarios tbody");
 const form = document.getElementById("formUsuario");
 
-// ✅ Cargar lista de usuarios
+// Cargar lista de usuarios
 async function cargarUsuarios() {
   try {
-    console.log("🔁 Cargando usuarios...");
-    const res = await fetch("http://localhost:4000/api/usuarios", {
+    console.log("Cargando usuarios...");
+
+    const res = await fetch("/api/usuarios", {
       headers: { "Authorization": `Bearer ${token}` }
     });
 
     if (!res.ok) {
       const errorText = await res.text();
       console.error("Error al obtener usuarios:", errorText);
-      alert("❌ No se pudieron obtener los usuarios. Ver consola.");
+      alert("No se pudieron obtener los usuarios.");
       return;
     }
 
     const data = await res.json();
-    console.log("✅ Usuarios recibidos:", data);
-
-    tablaBody.innerHTML = "";
+    tablaBody.replaceChildren();
 
     if (!Array.isArray(data) || data.length === 0) {
-      tablaBody.innerHTML = `<tr><td colspan="6" class="text-center text-muted">No hay usuarios registrados</td></tr>`;
+      const fila = document.createElement("tr");
+      const celda = document.createElement("td");
+      celda.colSpan = 6;
+      celda.className = "text-center text-muted";
+      celda.textContent = "No hay usuarios registrados";
+      fila.appendChild(celda);
+      tablaBody.appendChild(fila);
       return;
     }
 
-    // 🔹 Renderizar tabla
     data.forEach(u => {
       const fila = document.createElement("tr");
-      fila.innerHTML = `
-        <td>${u.id_usuario}</td>
-        <td>${u.nombre_usuario}</td>
-        <td>${u.documento}</td>
-        <td>${u.rolData ? u.rolData.nombre_rol : 'Sin rol'}</td>
-        <td>${u.sedeData ? u.sedeData.nombre_sede : 'Sin sede'}</td>
-        <td>
-          <button class="btn btn-sm btn-warning" onclick="editarUsuario(${u.id_usuario})">✏️</button>
-          <button class="btn btn-sm btn-danger" onclick="eliminarUsuario(${u.id_usuario})">🗑️</button>
-        </td>
-      `;
+
+      const valores = [
+        u.id_usuario,
+        u.nombre_usuario,
+        u.documento,
+        u.rolData ? u.rolData.nombre_rol : "Sin rol",
+        u.sedeData ? u.sedeData.nombre_sede : "Sin sede"
+      ];
+
+      valores.forEach(valor => {
+        const celda = document.createElement("td");
+        celda.textContent = valor ?? "";
+        fila.appendChild(celda);
+      });
+
+      const celdaAcciones = document.createElement("td");
+
+      const btnEditar = document.createElement("button");
+      btnEditar.type = "button";
+      btnEditar.className = "btn btn-sm btn-warning";
+      btnEditar.textContent = "Editar";
+      btnEditar.addEventListener("click", () => editarUsuario(u.id_usuario));
+
+      const btnEliminar = document.createElement("button");
+      btnEliminar.type = "button";
+      btnEliminar.className = "btn btn-sm btn-danger";
+      btnEliminar.textContent = "Eliminar";
+      btnEliminar.addEventListener("click", () => eliminarUsuario(u.id_usuario));
+
+      celdaAcciones.append(btnEditar, " ", btnEliminar);
+      fila.appendChild(celdaAcciones);
       tablaBody.appendChild(fila);
     });
+
   } catch (error) {
     console.error("Error en cargarUsuarios():", error);
   }
 }
 
-// ✅ Registrar nuevo usuario
+// Registrar nuevo usuario
 form.addEventListener("submit", async e => {
   e.preventDefault();
 
@@ -68,46 +92,55 @@ form.addEventListener("submit", async e => {
     sede: parseInt(form.sede.value)
   };
 
-  const res = await fetch("http://localhost:4000/api/usuarios", {
-    method: "POST",
-    headers: {
-      "Authorization": `Bearer ${token}`,
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(datos)
-  });
+  try {
+    const res = await fetch("/api/usuarios", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(datos)
+    });
 
-  if (res.ok) {
     const data = await res.json();
-    alert("✅ " + data.mensaje);
-    form.reset();
-    await cargarUsuarios(); // 🔁 Actualiza tabla
-  } else {
-    const err = await res.json();
-    alert("❌ Error: " + err.mensaje);
+
+    if (res.ok) {
+      alert(data.mensaje);
+      form.reset();
+      await cargarUsuarios();
+    } else {
+      alert("Error: " + (data.mensaje || "No se pudo registrar el usuario"));
+    }
+  } catch (error) {
+    console.error(error);
+    alert("Error de conexión al registrar usuario");
   }
 });
 
-// ✅ Eliminar usuario
+// Eliminar usuario
 async function eliminarUsuario(id) {
   if (!confirm("¿Eliminar este usuario?")) return;
 
-  const res = await fetch(`http://localhost:4000/api/usuarios/${id}`, {
-    method: "DELETE",
-    headers: { "Authorization": `Bearer ${token}` }
-  });
+  try {
+    const res = await fetch(`/api/usuarios/${encodeURIComponent(id)}`, {
+      method: "DELETE",
+      headers: { "Authorization": `Bearer ${token}` }
+    });
 
-  if (res.ok) {
-    alert("🗑️ Usuario eliminado correctamente");
-    await cargarUsuarios();
-  } else {
-    alert("❌ Error al eliminar usuario");
+    if (res.ok) {
+      alert("Usuario eliminado correctamente");
+      await cargarUsuarios();
+    } else {
+      alert("Error al eliminar usuario");
+    }
+  } catch (error) {
+    console.error(error);
+    alert("Error de conexión al eliminar usuario");
   }
 }
 
-// ✅ Editar usuario
+// Editar usuario
 async function editarUsuario(id) {
-  // 🔹 Pedir nuevos datos
   const nombre_usuario = prompt("Nuevo nombre de usuario:");
   if (!nombre_usuario) return alert("El nombre no puede estar vacío.");
 
@@ -122,28 +155,34 @@ async function editarUsuario(id) {
   const sede = parseInt(prompt("Nueva sede (ID numérico):"));
   if (isNaN(sede)) return alert("Sede inválida.");
 
-  const res = await fetch(`http://localhost:4000/api/usuarios/${id}`, {
-    method: "PUT",
-    headers: {
-      "Authorization": `Bearer ${token}`,
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ nombre_usuario, documento, contrasenia, rol, sede })
-  });
+  try {
+    const res = await fetch(`/api/usuarios/${encodeURIComponent(id)}`, {
+      method: "PUT",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ nombre_usuario, documento, contrasenia, rol, sede })
+    });
 
-  if (res.ok) {
-    alert("✏️ Usuario actualizado correctamente");
-    await cargarUsuarios();
-  } else {
-    alert("❌ Error al actualizar usuario");
+    if (res.ok) {
+      alert("Usuario actualizado correctamente");
+      await cargarUsuarios();
+    } else {
+      alert("Error al actualizar usuario");
+    }
+  } catch (error) {
+    console.error(error);
+    alert("Error de conexión al actualizar usuario");
   }
 }
 
-// ✅ Cerrar sesión
+// Cerrar sesión
 document.getElementById("logout").addEventListener("click", () => {
   localStorage.clear();
   window.location.href = "login.html";
 });
 
-// ✅ Cargar usuarios al abrir
+// Cargar usuarios al abrir
 cargarUsuarios();
+
