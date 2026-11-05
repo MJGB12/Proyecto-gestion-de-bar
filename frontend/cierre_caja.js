@@ -44,3 +44,8 @@ function pintarTabla(cierres) {
 }
 
 cargarCierres();
+
+document.getElementById("formCierre")?.addEventListener("submit", (event) => {
+    event.preventDefault();
+    realizarCierre();
+});
