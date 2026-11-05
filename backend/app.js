@@ -6,6 +6,21 @@ const { sequelize } = require('./models');
 
 const app = express();
 
+// Ocultar información de Express
+app.disable('x-powered-by');
+
+// Evitar interpretación incorrecta de tipos MIME
+app.use((req, res, next) => {
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    next();
+});
+
+// Protección contra Clickjacking
+app.use((req, res, next) => {
+    res.setHeader('X-Frame-Options', 'DENY');
+    next();
+});
+
 app.use(express.json());
 
 // Rutas de la API
