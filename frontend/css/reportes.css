@@ -1,0 +1,64 @@
+/* Estilos base para el fondo (Imagen y Coherencia) */
+        body {
+            background-image: url('./img/fondo.jpg'); /* Fondo de imagen de bar */
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            min-height: 100vh;
+            color: #ffffff; /* Color de texto base */
+        }
+
+        /* 1. Barra de Navegación (Nueva adición para coherencia) */
+        .navbar {
+            background-color: rgba(10, 10, 10, 0.95) !important; 
+            border-bottom: 3px solid #ffc107; /* Acento amarillo */
+        }
+        .navbar-brand {
+            color: #ffc107 !important; 
+            font-weight: bold;
+        }
+        
+        /* Contenedor principal de la página (Fondo semitransparente) */
+        .page-container {
+            background-color: rgba(0, 0, 0, 0.75); /* Fondo negro con buena transparencia */
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5); 
+        }
+
+        /* 2. Estilo para inputs (Date y botones) */
+        .form-control {
+            background-color: rgba(255, 255, 255, 0.1); 
+            color: #ffffff;
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        .form-control:focus {
+            background-color: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 0 0.25rem rgba(255, 193, 7, 0.5); /* Resplandor amarillo */
+            border-color: #ffc107;
+        }
+
+        /* Fuerza el color del texto del date picker (depende del navegador) */
+        input[type="date"] {
+            color: #ffffff;
+        }
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(1); /* Cambia el color del icono del calendario a blanco */
+        }
+
+        /* 3. Tabla */
+        .table {
+            color: white;
+            margin-top: 25px;
+        }
+        .table-dark thead th {
+            background-color: #ffc107; /* Encabezado amarillo */
+            color: #000000;
+            border-color: #ffc107 !important;
+        }
+        .table-striped > tbody > tr:nth-of-type(odd) > * {
+             background-color: rgba(20, 20, 20, 0.9); /* Rayas más oscuras */
+        }
+        .table-striped > tbody > tr:nth-of-type(even) > * {
+             background-color: rgba(30, 30, 30, 0.9);
+        }
