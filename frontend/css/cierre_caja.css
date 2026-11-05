@@ -1,6 +1,6 @@
 /* Estilos base para el fondo (Imagen y Coherencia) */
         body {
-            background-image: url('./img/fondo.jpg'); /* Fondo de imagen de bar */
+            background-image: url('../img/fondo.jpg'); /* Fondo de imagen de bar */
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
