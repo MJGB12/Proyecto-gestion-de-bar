@@ -5,101 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de Mesas - Bar 🪑</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="./css/mesas.css">
     
-    <style>
-        /* Estilos base para el fondo (Imagen y Coherencia) */
-        body {
-            background-image: url('./img/fondo.jpg'); /* Fondo de imagen de bar */
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            min-height: 100vh;
-            color: #ffffff; /* Color de texto base */
-        }
-        
-        /* Contenedor principal para centrar el contenido y darle un fondo semi-transparente */
-        .page-container {
-            background-color: rgba(0, 0, 0, 0.75); /* Fondo negro con buena transparencia */
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5); 
-        }
-
-        /* 1. Barra de Navegación (Nueva adición para coherencia) */
-        .navbar {
-            background-color: rgba(10, 10, 10, 0.95) !important; 
-            border-bottom: 3px solid #ffc107; /* Acento amarillo */
-        }
-        .navbar-brand {
-            color: #ffc107 !important; 
-            font-weight: bold;
-        }
-
-        /* 2. Estilos del Grid y Tarjetas de Mesa */
-        .mesa-card {
-            width: 160px;
-            height: 160px;
-            border-radius: 15px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            font-size: 1.2rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Sombra inicial */
-            border: 2px solid transparent; /* Borde base */
-        }
-
-        .mesa-card:hover {
-            transform: scale(1.05);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.7);
-        }
-        
-        /* 3. Colores de Estado (Ajustados a la Paleta del Bar) */
-        
-        /* VERDE: Disponible (Libre para usar) */
-        .disponible {
-            background-color: #198754; /* Verde de Bootstrap */
-            border-color: #0f5132;
-        }
-
-        /* AMARILLO: Ocupada (En Uso, creando pedidos o sirviendo) */
-        .ocupada {
-            background-color: #ffc107; /* AMARILLO de acento del bar */
-            color: #000000; /* Texto negro para contraste */
-            border-color: #e0a800;
-        }
-
-        /* ROJO: Necesita Pago/Limpieza/Pendiente (Alta prioridad) */
-        .pendiente {
-            background-color: #dc3545; /* Rojo de Bootstrap (Peligro) */
-            border-color: #842029;
-        }
-        
-        /* Se puede añadir un color para "Reservada" o "Inactiva" */
-        .reservada {
-            background-color: #0dcaf0; /* Azul claro */
-            color: #000000;
-            border-color: #087990;
-        }
-        
-        /* Estilos del Grid */
-        .mesa-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-            gap: 25px; /* Espacio un poco mayor para separar las tarjetas */
-            justify-items: center;
-            padding: 20px 0;
-        }
-
-        .estado-texto {
-            font-size: 0.9rem;
-            opacity: 0.9;
-        }
-
-    </style>
 </head>
 <body>
 
@@ -149,15 +56,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="mesas.js"></script>
-    <script>
-        // Lógica de logout (manteniendo la coherencia)
-        document.getElementById("logout")?.addEventListener("click", () => {
-            localStorage.clear();
-            window.location.href = "login.html";
-        });
-        
-        // ** NOTA: Tu archivo mesas.js es el encargado de generar las tarjetas y asignar los estados. **
-    </script>
+    <script src="./js/logout.js"></script>
     <!-- Modal para seleccionar Sede -->
 <div class="modal fade" id="modalSede" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
