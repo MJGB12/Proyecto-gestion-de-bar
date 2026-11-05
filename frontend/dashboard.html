@@ -133,27 +133,6 @@
     </div>
   </main>
   
-  <script>
-    // Se recomienda agregar el icono de Bootstrap si no está cargado
-    // document.getElementById("logout").innerHTML = '<i class="bi bi-box-arrow-right"></i> Cerrar sesión';
-
-    const usuario = JSON.parse(localStorage.getItem("usuario"));
-    const token = localStorage.getItem("token");
-
-    // Lógica de redirección
-    if (!usuario || !token) {
-      window.location.href = "login.html";
-    } else {
-      // Se actualiza el texto en la nueva ubicación (navbar)
-      document.getElementById("bienvenida").textContent =
-        `Bienvenido, ${usuario.nombre} (Rol: ${usuario.rol})`;
-    }
-
-    // Lógica de logout
-    document.getElementById("logout").addEventListener("click", () => {
-      localStorage.clear();
-      window.location.href = "login.html";
-    });
-  </script>
+  <script src="./js/dashboard.js"></script>
 </body>
 </html>
