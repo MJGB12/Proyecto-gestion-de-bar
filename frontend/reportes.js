@@ -33,3 +33,16 @@ function descargarCSV() {
 function descargarPDF() {
   window.open("/api/reportes/export/pdf", "_blank");
 }
+
+document.getElementById("formReporte").addEventListener("submit", (event) => {
+    event.preventDefault();
+    buscarReporte();
+});
+
+document.getElementById("btnCSV").addEventListener("click", () => {
+    descargarCSV();
+});
+
+document.getElementById("btnPDF").addEventListener("click", () => {
+    descargarPDF();
+});
