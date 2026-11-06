@@ -9,6 +9,24 @@ const app = express();
 // Ocultar información de Express
 app.disable('x-powered-by');
 
+// Política CSP en modo Report-Only (solo supervisión)
+app.use((req, res, next) => {
+    res.setHeader(
+        'Content-Security-Policy-Report-Only',
+        "default-src 'self'; " +
+        "script-src 'self' https://cdn.jsdelivr.net; " +
+        "style-src 'self' https://cdn.jsdelivr.net; " +
+        "img-src 'self' data:; " +
+        "font-src 'self' https://cdn.jsdelivr.net; " +
+        "connect-src 'self'; " +
+        "object-src 'none'; " +
+        "base-uri 'self'; " +
+        "frame-ancestors 'none'; " +
+        "form-action 'self'"
+    );
+    next();
+});
+
 // Evitar interpretación incorrecta de tipos MIME
 app.use((req, res, next) => {
     res.setHeader('X-Content-Type-Options', 'nosniff');
