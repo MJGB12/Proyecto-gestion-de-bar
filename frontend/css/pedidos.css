@@ -1,5 +1,5 @@
     /* estilos existentes) */
-    body { background-image: url('./img/fondo.jpg'); background-size: cover; background-position: center; background-attachment: fixed; min-height:100vh; color:#fff; }
+    body { background-image: url('../img/fondo.jpg'); background-size: cover; background-position: center; background-attachment: fixed; min-height:100vh; color:#fff; }
     .navbar { background-color: rgba(10,10,10,0.95) !important; border-bottom:3px solid #ffc107; }
     .page-container { background-color: rgba(0,0,0,0.75); padding:30px; border-radius:10px; }
     .card { background-color: rgba(30,30,30,0.9); color:#fff; }
