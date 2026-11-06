@@ -1,6 +1,6 @@
 /* 1. Fondo general de Bar (oscuro y ambiental) */
         body {
-            background-image: url('./img/fondo.jpg'); 
+            background-image: url('../img/fondo.jpg'); 
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
