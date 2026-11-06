@@ -12,7 +12,7 @@ app.disable('x-powered-by');
 // Política CSP en modo Report-Only (solo supervisión)
 app.use((req, res, next) => {
     res.setHeader(
-        'Content-Security-Policy-Report-Only',
+        'Content-Security-Policy',
         "default-src 'self'; " +
         "script-src 'self' https://cdn.jsdelivr.net; " +
         "style-src 'self' https://cdn.jsdelivr.net; " +
