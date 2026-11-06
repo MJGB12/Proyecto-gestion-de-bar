@@ -1,6 +1,6 @@
 /* Estilos base para el fondo */
     body {
-      background-image: url('./img/fondo.jpg'); 
+      background-image: url('../img/fondo.jpg'); 
       background-size: cover;
       background-position: center;
       background-attachment: fixed;
