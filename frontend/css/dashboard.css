@@ -1,0 +1,38 @@
+/* Estilos base para el fondo */
+    body {
+      background-image: url('./img/fondo.jpg'); 
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      min-height: 100vh; /* Asegura que el cuerpo ocupe al menos toda la altura de la vista */
+    }
+
+    /* Estilo para un contenedor principal más transparente y centrado */
+    .panel-container {
+      background-color: rgba(0, 0, 0, 0.75); /* Fondo negro con buena transparencia */
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5); /* Sombra para resaltar */
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+
+    /* Estilos para las tarjetas de contenido */
+    .card {
+      background-color: rgba(30, 30, 30, 0.9); /* Fondo oscuro semitransparente para tarjetas */
+      color: #ffffff; /* Texto blanco */
+      border: 1px solid rgba(255, 255, 255, 0.1); /* Borde sutil */
+    }
+    
+    /* Estilo para el encabezado/barra de navegación */
+    .navbar {
+        background-color: rgba(10, 10, 10, 0.95) !important; /* Fondo casi opaco para el encabezado */
+        border-bottom: 3px solid #ffc107; /* Línea de color de acento (Amarillo de Bootstrap) */
+    }
+    
+    /* Estilo para la tabla */
+    .table-dark {
+      background-color: rgba(20, 20, 20, 0.9);
+      --bs-table-bg: rgba(20, 20, 20, 0.9); /* Asegura el fondo oscuro */
+      --bs-table-color: #ffffff; /* Asegura el texto blanco */
+    }
