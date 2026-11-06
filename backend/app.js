@@ -1,10 +1,12 @@
 
 const express = require('express');
+const cors = require('cors');
 require('dotenv').config();
 const path = require('path');
 const { sequelize } = require('./models');
 
 const app = express();
+app.use(cors());
 
 // Ocultar información de Express
 app.disable('x-powered-by');
