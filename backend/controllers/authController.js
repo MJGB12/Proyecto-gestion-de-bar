@@ -54,5 +54,16 @@ const login = async (req, res) => {
   }
 };
 
+const logout = (req, res) => {
+  res.clearCookie('token', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    path: '/'
+  });
+
+  res.json({ mensaje: 'Sesión cerrada correctamente' });
+};
+
 module.exports = { login };
 
