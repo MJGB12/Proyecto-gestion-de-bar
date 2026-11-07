@@ -1,13 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const token = localStorage.getItem("token");
     const grid = document.getElementById("mesaGrid");
     const modalSede = document.getElementById("modalSede");
-
-    if (!token) {
-        alert("Debes iniciar sesión");
-        window.location.href = "login.html";
-        return;
-    }
 
     const sedeGuardada = localStorage.getItem("sedeSeleccionada");
 
@@ -43,7 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         try {
             const res = await fetch(`/api/mesas/por-sede/${idSede}`, {
-                headers: { Authorization: `Bearer ${token}` }
+                credentials: "include"
             });
 
             if (!res.ok) {
@@ -154,8 +147,8 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
             const res = await fetch(`/api/mesas/${id}/estado`, {
                 method: "PUT",
+                credentials: "include",
                 headers: {
-                    Authorization: `Bearer ${token}`,
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({ estado })
