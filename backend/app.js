@@ -1,5 +1,5 @@
-
 const express = require('express');
+const cookieParser = require('cookie-parser');
 require('dotenv').config();
 const path = require('path');
 const { sequelize } = require('./models');
@@ -40,6 +40,7 @@ app.use((req, res, next) => {
 });
 
 app.use(express.json());
+app.use(cookieParser());
 
 // Rutas de la API
 app.use('/api/auth', require('./routes/authRoutes'));
