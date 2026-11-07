@@ -42,6 +42,40 @@ app.use((req, res, next) => {
 app.use(express.json());
 app.use(cookieParser());
 
+// Protección CSRF mediante validación del origen
+app.use((req, res, next) => {
+    const metodosModificacion = ['POST', 'PUT', 'PATCH', 'DELETE'];
+
+    if (!metodosModificacion.includes(req.method)) {
+        return next();
+    }
+
+    const origen = req.get('origin');
+
+    if (!origen) {
+        return res.status(403).json({
+            mensaje: 'Solicitud rechazada: origen no proporcionado'
+        });
+    }
+
+    try {
+        const urlOrigen = new URL(origen);
+        const hostEsperado = req.get('host');
+
+        if (urlOrigen.host !== hostEsperado) {
+            return res.status(403).json({
+                mensaje: 'Solicitud rechazada: origen no autorizado'
+            });
+        }
+
+        next();
+    } catch (error) {
+        return res.status(403).json({
+            mensaje: 'Solicitud rechazada: origen inválido'
+        });
+    }
+});
+
 // Rutas de la API
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/usuarios', require('./routes/usuarioRoutes'));
