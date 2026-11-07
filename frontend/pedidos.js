@@ -1,4 +1,3 @@
-
 document.addEventListener("DOMContentLoaded", () => {
     const token = localStorage.getItem("token");
 
@@ -29,7 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
     async function cargarProductos() {
         try {
             const res = await fetch("/api/productos", {
-                headers: { credentials: "include" }
+                credentials: "include" 
             });
 
             if (!res.ok) throw new Error("No se pudieron cargar los productos");
@@ -166,7 +165,7 @@ document.addEventListener("DOMContentLoaded", () => {
     async function cargarPedidos() {
         try {
             const res = await fetch("/api/pedidos", {
-                headers: { credentials: "include" }
+                credentials: "include" 
             });
 
             if (res.status === 401 || res.status === 403) {
@@ -317,4 +316,3 @@ document.addEventListener("DOMContentLoaded", () => {
     cargarProductos();
     cargarPedidos();
 });
-
