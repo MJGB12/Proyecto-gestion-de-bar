@@ -1,22 +1,34 @@
-const token = localStorage.getItem("token");
+
 const usuario = JSON.parse(localStorage.getItem("usuario"));
 
-if (!token || !usuario || usuario.rol !== 1) {
-  alert("Acceso denegado: solo administradores");
+if (!usuario) {
   window.location.href = "login.html";
+} else if (usuario.rol !== 1) {
+  alert("Acceso denegado: solo administradores");
+  window.location.href = "dashboard.html";
 }
 
 const tablaBody = document.querySelector("#tablaUsuarios tbody");
 const form = document.getElementById("formUsuario");
 
+async function comprobarSesion(res) {
+  if (res.status === 401 || res.status === 403) {
+    alert("Tu sesión no es válida o no tienes permiso para realizar esta acción.");
+    localStorage.removeItem("usuario");
+    window.location.href = "login.html";
+    return true;
+  }
+  return false;
+}
+
 // Cargar lista de usuarios
 async function cargarUsuarios() {
   try {
-    console.log("Cargando usuarios...");
-
     const res = await fetch("/api/usuarios", {
-      headers: { "Authorization": `Bearer ${token}` }
+      credentials: "include"
     });
+
+    if (await comprobarSesion(res)) return;
 
     if (!res.ok) {
       const errorText = await res.text();
@@ -95,12 +107,12 @@ form.addEventListener("submit", async e => {
   try {
     const res = await fetch("/api/usuarios", {
       method: "POST",
-      headers: {
-        "Authorization": `Bearer ${token}`,
-        "Content-Type": "application/json"
-      },
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(datos)
     });
+
+    if (await comprobarSesion(res)) return;
 
     const data = await res.json();
 
@@ -124,8 +136,10 @@ async function eliminarUsuario(id) {
   try {
     const res = await fetch(`/api/usuarios/${encodeURIComponent(id)}`, {
       method: "DELETE",
-      headers: { "Authorization": `Bearer ${token}` }
+      credentials: "include"
     });
+
+    if (await comprobarSesion(res)) return;
 
     if (res.ok) {
       alert("Usuario eliminado correctamente");
@@ -158,12 +172,12 @@ async function editarUsuario(id) {
   try {
     const res = await fetch(`/api/usuarios/${encodeURIComponent(id)}`, {
       method: "PUT",
-      headers: {
-        "Authorization": `Bearer ${token}`,
-        "Content-Type": "application/json"
-      },
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ nombre_usuario, documento, contrasenia, rol, sede })
     });
+
+    if (await comprobarSesion(res)) return;
 
     if (res.ok) {
       alert("Usuario actualizado correctamente");
@@ -178,11 +192,24 @@ async function editarUsuario(id) {
 }
 
 // Cerrar sesión
-document.getElementById("logout").addEventListener("click", () => {
-  localStorage.clear();
-  window.location.href = "login.html";
+document.getElementById("logout").addEventListener("click", async () => {
+  try {
+    const res = await fetch("/api/auth/logout", {
+      method: "POST",
+      credentials: "include"
+    });
+
+    if (!res.ok) {
+      alert("No se pudo cerrar la sesión correctamente.");
+      return;
+    }
+
+    localStorage.removeItem("usuario");
+    window.location.href = "login.html";
+  } catch (error) {
+    alert("Error de conexión al cerrar sesión.");
+  }
 });
 
 // Cargar usuarios al abrir
-cargarUsuarios();
-
+if (usuario?.rol === 1) cargarUsuarios();
