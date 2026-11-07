@@ -1,17 +1,20 @@
 
-const token = localStorage.getItem("token");
-
-if (!token) {
-    alert("Debes iniciar sesión");
-    window.location.href = "login.html";
-}
-
 const tablaBody = document.querySelector("#tablaProductos tbody");
 const form = document.getElementById("formProducto");
 const btnOrdenar = document.getElementById("ordenarPrecio");
 
 let productos = [];
 let ordenAscendente = true;
+
+async function comprobarSesion(res) {
+    if (res.status === 401 || res.status === 403) {
+        alert("Tu sesión no es válida o no tienes permiso.");
+        localStorage.removeItem("usuario");
+        window.location.href = "login.html";
+        return true;
+    }
+    return false;
+}
 
 function quickSortProductos(arr, clave) {
     if (arr.length <= 1) return arr;
@@ -85,9 +88,10 @@ function mostrarProductos(lista) {
 async function cargarProductos() {
     try {
         const res = await fetch("/api/productos", {
-            headers: { Authorization: `Bearer ${token}` }
+            credentials: "include"
         });
 
+        if (await comprobarSesion(res)) return;
         if (!res.ok) throw new Error("No se pudieron cargar los productos");
 
         productos = await res.json();
@@ -121,13 +125,12 @@ form.addEventListener("submit", async e => {
 
         const res = await fetch("/api/productos", {
             method: "POST",
-            headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json"
-            },
+            credentials: "include",
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(formData)
         });
 
+        if (await comprobarSesion(res)) return;
         if (!res.ok) throw new Error("Error al registrar producto");
 
         alert("Producto registrado correctamente");
@@ -161,16 +164,15 @@ async function editarProducto(id) {
     try {
         const res = await fetch(`/api/productos/${id}`, {
             method: "PUT",
-            headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json"
-            },
+            credentials: "include",
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
                 precio: Number(nuevoPrecio),
                 cantidad: Number(nuevaCantidad)
             })
         });
 
+        if (await comprobarSesion(res)) return;
         if (!res.ok) throw new Error("No se pudo actualizar el producto");
 
         alert("Producto actualizado correctamente");
@@ -187,9 +189,10 @@ async function eliminarProducto(id) {
     try {
         const res = await fetch(`/api/productos/${id}`, {
             method: "DELETE",
-            headers: { Authorization: `Bearer ${token}` }
+            credentials: "include"
         });
 
+        if (await comprobarSesion(res)) return;
         if (!res.ok) throw new Error("No se pudo eliminar el producto");
 
         alert("Producto eliminado correctamente");
@@ -201,4 +204,3 @@ async function eliminarProducto(id) {
 }
 
 cargarProductos();
-
