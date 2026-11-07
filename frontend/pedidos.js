@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const token = localStorage.getItem("token");
 
     const form = document.getElementById("formPedido");
     const listaProductos = document.getElementById("listaProductos");
@@ -137,8 +136,8 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
             const res = await fetch("/api/pedidos", {
                 method: "POST",
+                credentials: "include",
                 headers: {
-                    credentials: "include",
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify(datos)
@@ -251,8 +250,8 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
             const res = await fetch(`/api/pedidos/${id}/estado`, {
                 method: "PUT",
+                credentials: "include",
                 headers: {
-                    credentials: "include",
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({ estado })
@@ -291,8 +290,8 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
             const res = await fetch(`/api/pedidos/cerrar/${idPedido}`, {
                 method: "PUT",
+                credentials: "include",
                 headers: {
-                    credentials: "include",
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({ metodo_pago: metodoPago })
