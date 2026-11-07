@@ -1,14 +1,29 @@
-const token = localStorage.getItem("token");
 
-function buscarReporte() {
+async function buscarReporte() {
   const inicio = document.getElementById("fecha_inicio").value;
   const fin = document.getElementById("fecha_fin").value;
 
-  fetch(`/api/reportes/ventas/fecha?fecha_inicio=${inicio}&fecha_fin=${fin}`, {
-    headers: { "Authorization": "Bearer " + token }
-  })
-  .then(res => res.json())
-  .then(data => pintarTabla(data));
+  try {
+    const res = await fetch(
+      `/api/reportes/ventas/fecha?fecha_inicio=${encodeURIComponent(inicio)}&fecha_fin=${encodeURIComponent(fin)}`,
+      { credentials: "include" }
+    );
+
+    if (res.status === 401 || res.status === 403) {
+      localStorage.removeItem("usuario");
+      alert("Tu sesión no es válida o no tienes permiso.");
+      window.location.href = "login.html";
+      return;
+    }
+
+    if (!res.ok) throw new Error("No se pudo consultar el reporte");
+
+    const data = await res.json();
+    pintarTabla(data);
+  } catch (error) {
+    console.error(error);
+    alert("Error al consultar el reporte.");
+  }
 }
 
 function pintarTabla(ventas) {
@@ -16,13 +31,16 @@ function pintarTabla(ventas) {
   tbody.innerHTML = "";
 
   ventas.forEach(v => {
-    tbody.innerHTML += `
-      <tr>
-        <td>${v.id_venta}</td>
-        <td>$${v.total_venta}</td>
-        <td>${v.fecha_venta}</td>
-        <td>${v.id_cajero}</td>
-      </tr>`;
+    const fila = document.createElement("tr");
+
+    [v.id_venta, `$${v.total_venta}`, v.fecha_venta, v.id_cajero]
+      .forEach(valor => {
+        const celda = document.createElement("td");
+        celda.textContent = valor ?? "";
+        fila.appendChild(celda);
+      });
+
+    tbody.appendChild(fila);
   });
 }
 
@@ -34,15 +52,10 @@ function descargarPDF() {
   window.open("/api/reportes/export/pdf", "_blank");
 }
 
-document.getElementById("formReporte").addEventListener("submit", (event) => {
-    event.preventDefault();
-    buscarReporte();
+document.getElementById("formReporte").addEventListener("submit", event => {
+  event.preventDefault();
+  buscarReporte();
 });
 
-document.getElementById("btnCSV").addEventListener("click", () => {
-    descargarCSV();
-});
-
-document.getElementById("btnPDF").addEventListener("click", () => {
-    descargarPDF();
-});
+document.getElementById("btnCSV").addEventListener("click", descargarCSV);
+document.getElementById("btnPDF").addEventListener("click", descargarPDF);
