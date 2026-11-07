@@ -65,5 +65,5 @@ const logout = (req, res) => {
   res.json({ mensaje: 'Sesión cerrada correctamente' });
 };
 
-module.exports = { login };
+module.exports = { login, logout };
 
