@@ -170,7 +170,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if (res.status === 401 || res.status === 403) {
                 alert("Tu sesión no es válida o no tienes permiso");
-                localStorage.removeItem("token");
+                localStorage.removeItem("usuario");
                 window.location.href = "login.html";
                 return;
             }
