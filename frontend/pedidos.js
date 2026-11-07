@@ -2,12 +2,6 @@
 document.addEventListener("DOMContentLoaded", () => {
     const token = localStorage.getItem("token");
 
-    if (!token) {
-        alert("Debes iniciar sesión");
-        window.location.href = "login.html";
-        return;
-    }
-
     const form = document.getElementById("formPedido");
     const listaProductos = document.getElementById("listaProductos");
     const selectProducto = document.getElementById("selectProducto");
@@ -35,7 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
     async function cargarProductos() {
         try {
             const res = await fetch("/api/productos", {
-                headers: { Authorization: `Bearer ${token}` }
+                headers: { credentials: "include" }
             });
 
             if (!res.ok) throw new Error("No se pudieron cargar los productos");
@@ -145,7 +139,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const res = await fetch("/api/pedidos", {
                 method: "POST",
                 headers: {
-                    Authorization: `Bearer ${token}`,
+                    credentials: "include",
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify(datos)
@@ -172,7 +166,7 @@ document.addEventListener("DOMContentLoaded", () => {
     async function cargarPedidos() {
         try {
             const res = await fetch("/api/pedidos", {
-                headers: { Authorization: `Bearer ${token}` }
+                headers: { credentials: "include" }
             });
 
             if (res.status === 401 || res.status === 403) {
@@ -259,7 +253,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const res = await fetch(`/api/pedidos/${id}/estado`, {
                 method: "PUT",
                 headers: {
-                    Authorization: `Bearer ${token}`,
+                    credentials: "include",
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({ estado })
@@ -299,7 +293,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const res = await fetch(`/api/pedidos/cerrar/${idPedido}`, {
                 method: "PUT",
                 headers: {
-                    Authorization: `Bearer ${token}`,
+                    credentials: "include",
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({ metodo_pago: metodoPago })
